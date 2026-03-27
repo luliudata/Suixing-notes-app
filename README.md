@@ -1,50 +1,66 @@
-# Welcome to your Expo app 👋
+# TripTracker Notes (随行Notes)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A bilingual (English/Chinese) travel trip planner and checklist app built with React Native and Expo. 
 
-## Get started
+Users can create trips, manage category-based checklists, track transport and accommodations, log expenses, and generate AI-powered itineraries using Google Gemini.
 
-1. Install dependencies
+## Key Features
 
+- **Smart Checklists**: Manage packing, documents, and shopping with drag-to-reorder categories.
+- **Transport & Accommodation**: Track flights, trains, hotels, and check-in times in one place.
+- **AI Itinerary Planner**: Generate day-by-day travel plans based on your destination and checklists.
+- **Voice Input**: Add checklist items hands-free using AI audio transcription.
+- **Bilingual**: Full support for English and Simplified Chinese.
+- **Privacy First**: No accounts, no cloud storage. All data stays locally on your device.
+- **Export**: Share your trip details and AI itineraries as PDFs.
+
+## Tech Stack
+
+- **Framework**: React Native 0.81, Expo SDK 54, React 19
+- **Language**: TypeScript (strict mode)
+- **Routing**: Expo Router 6
+- **Storage**: `@react-native-async-storage/async-storage`
+- **AI Integration**: Google Gemini 2.5 Flash (via Cloudflare Worker proxy)
+- **UI/UX**: `rn-emoji-keyboard`, `reanimated-color-picker`, `react-native-draggable-flatlist`, `expo-haptics`
+
+## Local Development
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
-   ```bash
-   npx expo start
+2. Set up environment variables:
+   Create a `.env` file in the root directory. You can either use a direct Gemini API key for local testing, or point to your Cloudflare proxy:
+   ```env
+   # Local testing (direct to Google)
+   EXPO_PUBLIC_GEMINI_API_KEY="your-gemini-api-key"
+   
+   # Or use the production proxy
+   EXPO_PUBLIC_GEMINI_PROXY_URL="https://your-worker.your-subdomain.workers.dev"
    ```
 
-In the output, you'll find options to open the app in a
+3. Start the Expo development server:
+   ```bash
+   npx expo start --clear
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Production Build & Deployment
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+This project uses EAS (Expo Application Services) for cloud builds and App Store submission.
 
-## Get a fresh project
+1. Build the iOS app:
+   ```bash
+   eas build --platform ios
+   ```
 
-When you're ready, run:
+2. Submit to TestFlight / App Store Connect:
+   ```bash
+   eas submit --platform ios --latest
+   ```
 
-```bash
-npm run reset-project
-```
+*Note: The production build requires `EXPO_PUBLIC_GEMINI_PROXY_URL` to be set as a plaintext environment variable in your EAS project settings, as `.env` is gitignored and not uploaded to EAS.*
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## AI Proxy Setup
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+To protect the Gemini API key in production, the app routes AI requests through a Cloudflare Worker. See `server/PROXY-SETUP.md` for deployment instructions.
