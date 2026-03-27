@@ -34,6 +34,13 @@ yarn-error.*
 .env
 .env*.local
 
+# Apple / App Store Connect (keys & certs — *.p8 also covered under Native above)
+AuthKey_*.p8
+*.cer
+
+# Expo local credentials (if downloaded)
+credentials.json
+
 # typescript
 *.tsbuildinfo
 
